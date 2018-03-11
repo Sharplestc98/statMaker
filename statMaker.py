@@ -70,6 +70,26 @@ class statMaker:
 		print self.pad(self.space)+"'hp <number> <number>'   - returns a value to increment your hp by"
 		print self.pad(self.space)+"'roll' <number>          - returns a dice roll of the number of sides given"
 	
+	def breakUpString(self,String):
+		temp=String
+		dPos = temp.find("d")
+		plusPos = temp.find("+")
+		minusPos = temp.find("-")
+		if temp[0]!="d":
+			numDice = temp[0:dPos]
+		else:
+			numDice = "1"
+		if minusPos > -1:
+			modifier = "-"+temp[minusPos+1:len(temp)]
+			numSides = temp[dPos+1:minusPos]
+		elif plusPos > -1:
+			modifier = temp[plusPos+1:len(temp)]
+			numSides = temp[dPos+1:plusPos]
+		else:
+			modifier = "0"
+			numSides = temp[dPos+1:len(temp)]
+		return numSides,numDice,modifier
+		
 	def shell(self):
 		while True:
 			try:
@@ -89,23 +109,7 @@ class statMaker:
 				elif input[0] == "help":
 					self.help()
 				elif input[0] == "roll":
-					temp=input[1]
-					dPos = temp.find("d")
-					plusPos = temp.find("+")
-					minusPos = temp.find("-")
-					if temp[0]!="d":
-						numDice = temp[0:dPos]
-					else:
-						numDice = "1"
-					if minusPos > -1:
-						modifier = "-"+temp[minusPos+1:len(temp)]
-						numSides = temp[dPos+1:minusPos]
-					elif plusPos > -1:
-						modifier = temp[plusPos+1:len(temp)]
-						numSides = temp[dPos+1:plusPos]
-					else:
-						modifier = "0"
-						numSides = temp[dPos+1:len(temp)]
+					numSides,numDice,modifier = self.breakUpString(input[1])
 						
 					self.roll(numSides,numDice,modifier)
 				else:
