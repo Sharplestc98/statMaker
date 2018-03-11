@@ -28,7 +28,7 @@ class statMaker:
 		for x in range(0, 6):
 			print self.pad(self.space)+"Attribute: ",x+1
 			String = String+str(self.attribute())+"|"
-		print String
+		print String + "\n"
 	
 	'''
 	Makes a hit point increment based on given dice size and modifier. Prints out for the user
