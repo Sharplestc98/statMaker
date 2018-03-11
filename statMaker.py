@@ -1,13 +1,20 @@
 import random
 import sys
 
+'''
+A simple python program that enables the user to make some simple
+dnd dice rolling functions simpler. Such as rolling for attributes
+or your next amount of hit points
+
+Author: Thomas Christopher Sharples
+'''
 class statMaker:
 	
 	space = 9
 	
 	def __init__(self):
-		print self.pad(self.space)+"<<  Hello! Welcome to statMaker v0.1!  >>"
-		print self.pad(self.space)+"<<Please enter a command to get started>>\n"
+		print "\n\n   <<  Hello! Welcome to statMaker v0.1!  >>"
+		print "   <<Please enter a command to get started>>\n"
 		self.shell()
 		
 	def getAttributes(self):
@@ -39,7 +46,9 @@ class statMaker:
 		try:
 			total = 0
 			for x in range(0, int(numDice)):
-				total = total + self.rollDice(int(numSides))
+				num = self.rollDice(int(numSides))
+				print self.pad(self.space)+"Dice Roll",x+1," = ",num
+				total = total + num
 			total = total + int(modifier)
 			print self.pad(self.space)+"Rolling "+numDice+"d"+numSides+"+"+modifier+" Result = ",total 
 		except ValueError:
@@ -80,12 +89,20 @@ class statMaker:
 				elif input[0] == "help":
 					self.help()
 				elif input[0] == "roll":
-					if len(input)==2:
-						self.roll(input[1],"1","0")
-					elif len(input)==3:
-						self.roll(input[1],input[2],"0")
-					elif len(input)==4:
-						self.roll(input[1],input[2],input[3])
+					temp=input[1]
+					dPos = temp.find("d")
+					plusPos = temp.find("+")
+					minusPos = temp.find("-")
+					if temp[0]!="d":
+						numDice = temp[0:dPos]
+					if minusPos > -1:
+						modifier = "-"+temp[minusPos+1:len(temp)]
+						numSides = temp[dPos+1:minusPos]
+					elif plusPos > -1:
+						modifier = temp[plusPos+1:len(temp)]
+						numSides = temp[dPos+1:plusPos]
+						
+					self.roll(numSides,numDice,modifier)
 				else:
 					print self.pad(self.space)+"<<Input not recognised, type 'help' to see all commands>>"
 			except IndexError:
