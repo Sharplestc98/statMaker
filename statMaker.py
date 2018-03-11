@@ -24,10 +24,11 @@ class statMaker:
 	Makes a set of attribute scores and prints them out for the user
 	'''	
 	def getAttributes(self):
-		print self.pad(self.space)+"|",
+		String = "\n"+self.pad(self.space)+"|"
 		for x in range(0, 6):
-			print self.attribute(),"|",
-		print ""
+			print self.pad(self.space)+"Attribute: ",x+1
+			String = String+str(self.attribute())+"|"
+		print String
 	
 	'''
 	Makes a hit point increment based on given dice size and modifier. Prints out for the user
@@ -50,7 +51,9 @@ class statMaker:
 	def attribute(self):
 		l = []
 		for x in range(0, 4):
-			l.append(self.rollDice(6))
+			num = self.rollDice(6)
+			l.append(num)
+			print self.pad(self.space*2)+"Dice Roll",x+1," = ",num
 		l.remove(min(l))
 		return sum(l)
 	
