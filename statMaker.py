@@ -12,17 +12,26 @@ class statMaker:
 	
 	space = 9
 	
+	'''
+	Class constructor, prints out the starting statments and starts the shell
+	'''
 	def __init__(self):
 		print "\n\n   <<  Hello! Welcome to statMaker v0.1!  >>"
 		print "   <<Please enter a command to get started>>\n"
 		self.shell()
-		
+	
+	'''
+	Makes a set of attribute scores and prints them out for the user
+	'''	
 	def getAttributes(self):
 		print self.pad(self.space)+"|",
 		for x in range(0, 6):
 			print self.attribute(),"|",
 		print ""
-			
+	
+	'''
+	Makes a hit point increment based on given dice size and modifier. Prints out for the user
+	'''	
 	def getHitPoint(self,numSides,modifier):
 		try:
 			if int(modifier) > 0:
@@ -31,10 +40,13 @@ class statMaker:
 				mod = modifier
 			else:
 				mod = ""
-			print self.pad(self.space)+"Hit Point Increment = 1d"+numSides+mod," = ",self.hitPoints(int(numSides),int(modifier))
+			print self.pad(self.space)+"Hit Point Increment = 1d"+numSides+mod," = ",self.rollDice(int(numSides))+int(modifier)
 		except ValueError:
 			print self.pad(self.space)+"<<wrong data type given, please type 'help' to see correct data types>>"
-		
+	
+	'''
+	Makes a single attribute score by rolling 4 dice and removing the lowest roll
+	'''	
 	def attribute(self):
 		l = []
 		for x in range(0, 4):
@@ -42,6 +54,9 @@ class statMaker:
 		l.remove(min(l))
 		return sum(l)
 	
+	'''
+	Makes a dice roll from a given number of dice, dice size and modifier, prints the result
+	'''	
 	def roll(self,numSides,numDice,modifier):
 		try:
 			total = 0 + int(modifier)
@@ -54,22 +69,32 @@ class statMaker:
 		except ValueError:
 			print self.pad(self.space)+"<<wrong data type given, please type 'help' to see correct data types>>"
 	
+	'''
+	Rolls a single dice of a given size, returns the result
+	'''	
 	def rollDice(self, numSides):
 		roll = random.randint(1,numSides)
 		return roll
-		
-	def hitPoints(self,numSides,modifier):
-		return self.rollDice(numSides)+modifier
 	
+	'''
+	Pads the string with a given number of spaces
+	'''	
 	def pad(self,num):
 		return " "*num
 		
+	'''
+	Prints out the help message to the shell
+	'''		
 	def help(self):
 		print self.pad(self.space)+"'exit'                   - leaves the program"
 		print self.pad(self.space)+"'atr'                    - creates 6 atrribute variables"
 		print self.pad(self.space)+"'hp <number> <number>'   - returns a value to increment your hp by"
 		print self.pad(self.space)+"'roll' <number>          - returns a dice roll of the number of sides given"
 	
+	'''
+	Breaks up a dice string into its component parts so it can be used by the
+	roll dice function
+	'''
 	def breakUpString(self,String):
 		temp=String
 		dPos = temp.find("d")
@@ -89,7 +114,10 @@ class statMaker:
 			modifier = "0"
 			numSides = temp[dPos+1:len(temp)]
 		return numSides,numDice,modifier
-		
+	
+	'''
+	Starts and handles the shell
+	'''	
 	def shell(self):
 		while True:
 			try:
@@ -102,15 +130,12 @@ class statMaker:
 				elif input[0] == "atr":
 					self.getAttributes()
 				elif input[0] == "hp":
-					if len(input)==2:
-						self.getHitPoint(input[1],"0")
-					elif len(input)==3:
-						self.getHitPoint(input[1],input[2])
+					numSides,numDice,modifier = self.breakUpString(input[1])
+					self.getHitPoint(numSides,modifier)
 				elif input[0] == "help":
 					self.help()
 				elif input[0] == "roll":
-					numSides,numDice,modifier = self.breakUpString(input[1])
-						
+					numSides,numDice,modifier = self.breakUpString(input[1])	
 					self.roll(numSides,numDice,modifier)
 				else:
 					print self.pad(self.space)+"<<Input not recognised, type 'help' to see all commands>>"
