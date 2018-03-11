@@ -44,12 +44,12 @@ class statMaker:
 	
 	def roll(self,numSides,numDice,modifier):
 		try:
-			total = 0
+			total = 0 + int(modifier)
 			for x in range(0, int(numDice)):
 				num = self.rollDice(int(numSides))
 				print self.pad(self.space)+"Dice Roll",x+1," = ",num
 				total = total + num
-			total = total + int(modifier)
+			total = total
 			print self.pad(self.space)+"Rolling "+numDice+"d"+numSides+"+"+modifier+" Result = ",total 
 		except ValueError:
 			print self.pad(self.space)+"<<wrong data type given, please type 'help' to see correct data types>>"
@@ -95,12 +95,17 @@ class statMaker:
 					minusPos = temp.find("-")
 					if temp[0]!="d":
 						numDice = temp[0:dPos]
+					else:
+						numDice = "1"
 					if minusPos > -1:
 						modifier = "-"+temp[minusPos+1:len(temp)]
 						numSides = temp[dPos+1:minusPos]
 					elif plusPos > -1:
 						modifier = temp[plusPos+1:len(temp)]
 						numSides = temp[dPos+1:plusPos]
+					else:
+						modifier = "0"
+						numSides = temp[dPos+1:len(temp)]
 						
 					self.roll(numSides,numDice,modifier)
 				else:
